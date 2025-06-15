@@ -1,6 +1,6 @@
-# 🚨 Important Model Files Setup
+# Important Model Files Setup
 
-## 📦 Model Files Download
+##  Model Files Download
 
 **The trained model files are too large for GitHub** (total ~1.2GB). You **must** download them separately:
 
@@ -12,7 +12,7 @@
 3. Click "Download" (Google will create a ZIP archive)
 4. Unzip the files into the `models/` directory in your project
 
-⚠️ **Critical Directory Structure After Download:**
+ **Critical Directory Structure After Download:**
 ```
 your-project-folder/
 ├── models/
@@ -28,9 +28,9 @@ your-project-folder/
 │   └── xgboost_multiclass.pkl
 ```
 
-## 🛠️ Common Setup Problems & Solutions
+## Common Setup Problems & Solutions
 
-### ❌ Error: "No models loaded" on startup
+###  Error: "No models loaded" on startup
 **Fix these issues:**
 1. **Incorrect Download Location**  
    → Ensure all `.pkl` files are in `models/` (not in subfolders)
@@ -49,7 +49,7 @@ your-project-folder/
    - Binary models: ~150MB each  
    - Multiclass models: ~200MB each
 
-### ❌ Error: "Feature names mismatch"
+###  Error: "Feature names mismatch"
 **Solution:**  
 Delete all files in `models/` and:
 1. Redownload from Google Drive
