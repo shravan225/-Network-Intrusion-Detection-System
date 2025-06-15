@@ -1,150 +1,94 @@
+# 🚨 Important Model Files Setup
 
-# Network Intrusion Detection System
+## 📦 Model Files Download
 
-An ML-based system for detecting network attacks with binary (attack/normal) and multiclass (attack type) classification capabilities.
+**The trained model files are too large for GitHub** (total ~1.2GB). You **must** download them separately:
 
-## 📁 Repository Structure
+🔗 [Google Drive Models Folder](https://drive.google.com/drive/folders/1deB6nlLj0mgBXC2Xc4_AN20xq3CLlssv?usp=sharing)
 
+### Download Instructions:
+1. Open the Google Drive link above
+2. Select **all files** in the folder
+3. Click "Download" (Google will create a ZIP archive)
+4. Unzip the files into the `models/` directory in your project
+
+⚠️ **Critical Directory Structure After Download:**
 ```
-project/
-├── app.py                    # Flask application
-├── requirements.txt          # Python dependencies
-├── samples/
-│   ├── attack_sample.json    # Example attack traffic
-│   └── normal_sample.json    # Example normal traffic
-├── README.md                 # This file
-└── .gitignore                # Ignores model files
+your-project-folder/
+├── models/
+│   ├── balanced_logistic_regression_binary.pkl
+│   ├── balanced_random_forest_binary.pkl
+│   ├── lightgbm_binary.pkl
+│   ├── voting_classifier_binary.pkl
+│   ├── xgboost_binary.pkl
+│   ├── balanced_logistic_regression_multiclass.pkl
+│   ├── balanced_random_forest_multiclass.pkl
+│   ├── lightgbm_multiclass.pkl
+│   ├── voting_classifier_multiclass.pkl
+│   └── xgboost_multiclass.pkl
 ```
 
-## 🔧 Setup Instructions
+## 🛠️ Common Setup Problems & Solutions
 
-### 1. Prerequisites
-- Python 3.8+
-- Google Drive account (for model download)
-- Postman or curl for API testing
+### ❌ Error: "No models loaded" on startup
+**Fix these issues:**
+1. **Incorrect Download Location**  
+   → Ensure all `.pkl` files are in `models/` (not in subfolders)
 
-### 2. Download Models
-Models are too large for GitHub. Download them from:  
-🔗 [Google Drive Folder](https://drive.google.com/drive/folders/1deB6nlLj0mgBXC2Xc4_AN20xq3CLlssv?usp=sharing)
+2. **Missing Files**  
+   → Verify you have all 10 model files from Google Drive
+
+3. **Permission Issues**  
+   → On Linux/Mac:  
+   ```bash
+   chmod 644 models/*.pkl
+   ```
+
+4. **Corrupted Downloads**  
+   → Re-download the files and verify sizes:
+   - Binary models: ~150MB each  
+   - Multiclass models: ~200MB each
+
+### ❌ Error: "Feature names mismatch"
+**Solution:**  
+Delete all files in `models/` and:
+1. Redownload from Google Drive
+2. **Do not modify** the downloaded model files
+
+## 💻 Quick Start Test
+
+After setting up models, verify the system works:
 
 ```bash
-# Create models directory
-mkdir -p no_svm_models
+# 1. Start the server
+python app1.py
 
-# Download all files from Google Drive to this directory
+# 2. In another terminal, test with:
+curl -X POST http://localhost:5000/predict/binary \
+  -H "Content-Type: application/json" \
+  -d '@samples/normal_sample.json'
 ```
 
-### 3. Install Dependencies
-```bash
-pip install -r requirements.txt
+Expected success response:
+```json
+{
+  "interpretation": "Normal",
+  "model": "balanced_random_forest",
+  "prediction": 0,
+  "probability": 0.23
+}
 ```
 
-### 4. Run the Application
-```bash
-python app.py
-```
-Server will start at: `http://localhost:5000`
+## 📝 Postman Testing Guide
 
-## 🚀 API Endpoints
+1. **Import** the sample JSONs:
+   - `attack_sample.json` - Example DoS attack
+   - `normal_sample.json` - Regular traffic
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/predict/binary` | POST | Binary classification (Attack/Normal) |
-| `/predict/multiclass` | POST | Attack type classification |
-| `/analyze` | POST | Detailed traffic analysis |
-
-## 🧪 Testing with Postman
-
-1. **Import the sample JSON files**:
-   - Use the `attack_sample.json` and `normal_sample.json` from the `samples/` folder
-
-2. **Test Binary Classification**:
-   - **Request**:
-     ```
-     POST http://localhost:5000/predict/binary
-     Headers: Content-Type: application/json
-     Body: Select "raw" and paste contents from normal_sample.json
-     ```
-   - **Expected Normal Response**:
-     ```json
-     {
-         "interpretation": "Normal",
-         "probability": 0.23,
-         "prediction": 0
-     }
-     ```
-
-3. **Test Attack Detection**:
-   - Use `attack_sample.json` with the same endpoint
-   - **Expected Attack Response**:
-     ```json
-     {
-         "interpretation": "Attack",
-         "probability": 0.92,
-         "prediction": 1
-     }
-     ```
-
-## 🛠️ Development
-
-### Rebuilding Models
-If you need to retrain the models:
-
-```bash
-python train.py  # Your training script
-```
-
-### Environment Variables
-Configure in `app.py`:
-```python
-ATTACK_THRESHOLD = 0.6  # Sensitivity adjustment
-```
-
-## 📊 Model Performance
-
-| Model Type | Accuracy | F1 Score |
-|------------|----------|----------|
-| Binary | 97.4% | 97.5% |
-| Multiclass | 92.6% | 92.1% |
-
-## 🤝 Contributing
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/fooBar`)
-3. Commit your changes (`git commit -am 'Add some fooBar'`)
-4. Push to the branch (`git push origin feature/fooBar`)
-5. Create a new Pull Request
-
-## 📜 License
-MIT © 2023 [Your Name]
-```
-
-## Key Features of This README:
-
-1. **Clear Google Drive Integration**:
-   - Explicit instructions for model download
-   - Visual folder structure showing what's excluded from GitHub
-
-2. **Postman Testing Made Easy**:
-   - Ready-to-use sample JSON files
-   - Copy-paste request examples
-   - Expected responses for verification
-
-3. **Comprehensive Setup**:
-   - Step-by-step from environment setup to API testing
-   - Includes both CLI and GUI (Postman) methods
-
-4. **Maintenance Info**:
-   - Model retraining instructions
-   - Configuration options
-   - Contribution guidelines
-
-5. **Visual Organization**:
-   - Clean markdown formatting
-   - Tables for endpoints and performance metrics
-   - Clear section headers
-
-This README ensures users can:
-1. Quickly set up the project
-2. Understand where large files are stored
-3. Test the API immediately
-4. Know how to modify or extend the system
+2. **Collection Setup**:
+   ```http
+   POST http://localhost:5000/predict/binary
+   Headers:
+     Content-Type: application/json
+   Body: (select raw JSON and paste file contents)
+   ```
